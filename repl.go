@@ -16,7 +16,7 @@ func startRepl() {
 		if len(command) == 0 {
 			continue
 		}
-		c, exists := commandRegistry[command]
+		c, exists := cliCommands()[command]
 		if !exists {
 			fmt.Println("Unknown command")
 			continue
@@ -39,32 +39,17 @@ type cliCommand struct {
 	callback    func() error
 }
 
-var commandRegistry = map[string]cliCommand{}
-
-func init() {
-	commandRegistry["exit"] = cliCommand{
-		name:        "exit",
-		description: "Exit the program",
-		callback:    commandExit,
+func cliCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"exit": {
+			name:        "exit",
+			description: "Exit the program",
+			callback:    commandExit,
+		},
+		"help": {
+			name:        "help",
+			description: "Display this help message",
+			callback:    commandHelp,
+		},
 	}
-	commandRegistry["help"] = cliCommand{
-		name:        "help",
-		description: "Display this help message",
-		callback:    commandHelp,
-	}
-}
-
-func commandExit() error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-	return nil
-}
-
-func commandHelp() error {
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Print("Usage:\n\n")
-	for _, v := range commandRegistry {
-		fmt.Printf("%s: %s\n", v.name, v.description)
-	}
-	return nil
 }
