@@ -5,7 +5,20 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/andybzn/pokedex/internal/pokeapi"
 )
+
+type config struct {
+	ApiClient   pokeapi.Client
+	NextUrl     *string
+	PreviousUrl *string
+}
+
+var cfg = &config{
+	ApiClient: pokeapi.NewClient(10 * time.Second),
+}
 
 func startRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -21,7 +34,7 @@ func startRepl() {
 			fmt.Println("Unknown command")
 			continue
 		} else {
-			err := c.callback()
+			err := c.callback(cfg)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -36,7 +49,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
 func cliCommands() map[string]cliCommand {
@@ -50,6 +63,16 @@ func cliCommands() map[string]cliCommand {
 			name:        "help",
 			description: "Display this help message",
 			callback:    commandHelp,
+		},
+		"map": {
+			name:        "map",
+			description: "List the next 20 locations on the map",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "List the previous 20 locations on the map",
+			callback:    commandMapB,
 		},
 	}
 }
