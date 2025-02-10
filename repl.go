@@ -17,7 +17,7 @@ type config struct {
 }
 
 var cfg = &config{
-	ApiClient: pokeapi.NewClient(10 * time.Second),
+	ApiClient: pokeapi.NewClient(10*time.Second, 5*time.Minute),
 }
 
 func startRepl() {
