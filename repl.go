@@ -12,12 +12,16 @@ import (
 
 type config struct {
 	ApiClient   pokeapi.Client
+	PokeDex     pokeapi.Pokedex
 	NextUrl     *string
 	PreviousUrl *string
 }
 
 var cfg = &config{
 	ApiClient: pokeapi.NewClient(10*time.Second, 5*time.Minute),
+	PokeDex: pokeapi.Pokedex{
+		Pokemon: map[string]pokeapi.Pokemon{},
+	},
 }
 
 func startRepl() {
@@ -83,6 +87,11 @@ func cliCommands() map[string]cliCommand {
 			name:        "explore <location>",
 			description: "Explore the specified location area, listing the available Pokemon",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch <pokemon>",
+			description: "Attempt to catch a Pokemon, and add it to your Pokedex",
+			callback:    commandCatch,
 		},
 	}
 }
