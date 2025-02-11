@@ -33,13 +33,17 @@ type Pokemon struct {
 	Height         int    `json:"height"`
 	Weight         int    `json:"weight"`
 	Abilities      []struct {
-		Name string `json:"name"`
+		Ability struct {
+			Name string `json:"name"`
+		} `json:"ability"`
 	} `json:"abilities"`
 	Forms []struct {
 		Name string `json:"name"`
 	} `json:"forms"`
 	Moves []struct {
-		Name string `json:"name"`
+		Move struct {
+			Name string `json:"name"`
+		} `json:"move"`
 	} `json:"moves"`
 	Types []struct {
 		Type struct {
